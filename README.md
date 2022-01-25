@@ -10,35 +10,35 @@ you should assign 'argnet-l' to make the predict.
 Installation
 ------------
 
-To install with pip, run:
+  To install with pip, run:
 
-    git clone https://github.com/patience111/ARGNet
+      git clone https://github.com/patience111/ARGNet
 
 Quickstart Guide
 ----------------
-for full-length or contigs<\br>
-    python argnet.py --input input_path_data --type aa/nt --model argnet-l  --outname output_file_name
-for short reads
-    python argnet.py --input input_path_data --type aa/nt --model argnet-s  --outname output_file_name
+  for full-length or contigs</br>
+      python argnet.py --input input_path_data --type aa/nt --model argnet-l  --outname output_file_name </br>
+  for short reads</br>
+      python argnet.py --input input_path_data --type aa/nt --model argnet-s  --outname output_file_name </br>
     
-general options:
-     --input/-i    the test file as input
-     --type/-t     molecular type of your test data (aa for amino acid, nt for nucleotide)
-     --model/-m    the model you assign to make the prediction (argnet-l for long sequences, argnet-s for short reads) 
-     --outname/-on  the output file name  
+**general options:**</br>
+     --input/-i		the test file as input </br>
+     --type/-t		molecular type of your test data (aa for amino acid, nt for nucleotide)</br>
+     --model/-m		the model you assign to make the prediction (argnet-l for long sequences, argnet-s for short reads) </br>
+     --outname/-on	the output file name </br>
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -i INPUT, --input INPUT
-                        the test data as input
-  -t {aa,nt}, --type {aa,nt}
-                        molecular type of your input file
-  -m {argnet-s,argnet-l}, --model {argnet-s,argnet-l}
-                        the model to make the prediction
-  -on OUTNAME, --outname OUTNAME
-                        the name of results output
+**optional arguments:**</br>
+  -h, --help            show this help message and exit</br>
+  -i INPUT, --input INPUT </br>
+                        the test data as input </br>
+  -t {aa,nt}, --type {aa,nt} </br>
+                        molecular type of your input file </br>
+  -m {argnet-s,argnet-l}, --model {argnet-s,argnet-l} </br>
+                        the model to make the prediction </br>
+  -on OUTNAME, --outname OUTNAME </br>
+                        the name of results output </br>
 
-Hope you enjoy ARGNet journey, any problem please contact scpeiyao@gmail.com
+Hope you enjoy ARGNet journey, any problem please contact scpeiyao@gmail.com </br>
 
 Contribute
 ----------
