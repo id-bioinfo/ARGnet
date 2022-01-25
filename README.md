@@ -10,7 +10,7 @@ you should assign 'argnet-l' to make the predict.
 Installation
 ------------
 
-  To install with pip, run:
+  To install with git, run:
 
       git clone https://github.com/patience111/ARGNet
 
