@@ -1,0 +1,17 @@
+#!/bin/sh
+#PBS -N argnet
+#PBS -q gpuq1
+#PBS -l walltime=120:00:00
+#PBS -l select=1:ncpus=48:ngpus=1:mem=1024gb
+##Request 1 node 8 core,4 GPU and 64gb ram
+#PBS -o argnet.out
+#PBS -e argnet.err 
+#PBS -V
+# User Directives
+#module load python3 cuda11.0/toolkit/11.0.3 cudnn8.0-cuda11.0/8.0.5.39
+module load python3 tensorflow2-py37-cuda10.2-gcc/2.2.0
+#module load python37_tf22
+#python ~/wlm/PBS_tf/tensorflow_test.py
+/usr/bin/time -o /home/d24h_prog2/pypy/argnet/ARGNet/scripts/argnet_ssnt.txt -f "%E %M" python3 /home/d24h_prog2/pypy/argnet/ARGNet/scripts/argnet.py -i /home/d24h_prog2/pypy/argnet/ARGNet/tests/nt/short/arg100120150nt.fasta -t nt -m argnet-s -on argnet_ssnt_test.txt
+#End of script
+
