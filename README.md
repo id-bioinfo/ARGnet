@@ -1,7 +1,6 @@
 ARGNet
 ======
-
-a deep neural network for antibitotic resistance genes identification
+a deep nueral network for robust identification and annotation of antibiotic resistance genes.
 
 Installation
 ------------
