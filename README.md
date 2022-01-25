@@ -16,7 +16,7 @@ To install with pip, run:
 
 Quickstart Guide
 ----------------
-for full-length or contigs
+for full-length or contigs<\br>
     python argnet.py --input input_path_data --type aa/nt --model argnet-l  --outname output_file_name
 for short reads
     python argnet.py --input input_path_data --type aa/nt --model argnet-s  --outname output_file_name
@@ -38,7 +38,7 @@ optional arguments:
   -on OUTNAME, --outname OUTNAME
                         the name of results output
 
-Hope you enjoy ARGNet journey, any problem please contact scpeiyao@gmail.co
+Hope you enjoy ARGNet journey, any problem please contact scpeiyao@gmail.com
 
 Contribute
 ----------
