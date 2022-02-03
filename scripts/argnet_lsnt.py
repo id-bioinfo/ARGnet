@@ -107,7 +107,11 @@ def reconstruction_simi(pres, ori):
     simis = []
     reconstructs = []
     for index, ele in enumerate(pres[0]):
-        length = len(ori[index])
+        length = 0
+        if len(ori[index]) <= 1600:
+            length = len(ori[index])
+        else:
+            length = 1600
         count_simi = 0
         reconstruct = ''
         for pos in range(length):
