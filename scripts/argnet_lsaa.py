@@ -89,7 +89,7 @@ def prediction(seqs):
 def reconstruction_simi(pres, ori):
     simis = []
     reconstructs = []
-    for index, ele in enumerate(pres[0]):
+    for index, ele in enumerate(pres):
         length = 0
         if len(ori[index]) <= 1600:
             length = len(ori[index])
@@ -105,12 +105,26 @@ def reconstruction_simi(pres, ori):
         reconstructs.append(reconstruct)
     return reconstructs, simis
 
-
+def chunks(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
+        
 def argnet_lsaa(input_file, outfile):
     cut = 0.25868536454055224
+    print('read in file...')
     test = [i for i in sio.parse(input_file, 'fasta')]
     test_ids = [ele.id for ele in test]
+    print('encoding test file...')
     testencode = test_encode(test)
+    print('batch predict...')
+    testencode_pre1 = []
+    for ele in list(chunks(testencode, 10000)):
+
+        temp = filter_prediction_batch(ele) # if huge volumn of seqs (~ millions) this will be change to create batch in advance•
+        testencode_pre1.append(temp)
+    testencode_pre = np.vstack([item for sublist in testencode_pre1 for item in sublist])
+    print('reconstruct, simi...')
     testencode_pre = filter_prediction_batch(testencode) # if huge volumn of seqs (~ millions) this will be change to create batch in advance 
     reconstructs, simis = reconstruction_simi(testencode_pre, test)
     #results = calErrorRate(simis, cut) 
