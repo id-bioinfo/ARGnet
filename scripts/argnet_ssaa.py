@@ -93,10 +93,12 @@ def reconstruction_simi(pres, ori):
 cuts = [0.8275862068965517, 0.7, 0.6842105263157895]
 
 def argnet_ssaa(input_file, outfile):
-
+    print('reading in test file...')
     test = [i for i in sio.parse(input_file, 'fasta')]
     test_ids = [ele.id for ele in test]
+    print('encoding test file...')
     testencode = testencode64(test)
+    print('make prediction...')
     testencode_pre = prediction(testencode) # if huge volumn of seqs (~ millions) this will be change to create batch in advance 
     reconstructs, simis = reconstruction_simi(testencode_pre, test)
     passed_encode = [] ### notice list and np.array
@@ -124,6 +126,7 @@ def argnet_ssaa(input_file, outfile):
                 notpass_idx.append(index)
     
     ###classification
+    print('classifying...')
     train_data = [i for i in sio.parse(os.path.join(os.path.dirname(__file__), "../data/train.fasta"),'fasta')]
     train_labels = [ele.id.split('|')[3].strip() for ele in train_data]
     encodeder = LabelBinarizer()
@@ -139,8 +142,9 @@ def argnet_ssaa(input_file, outfile):
     out = {}
     for i, ele in enumerate(passed_idx):
         out[ele] = [np.max(classifications[i]), label_dic[np.argmax(classifications[i])]]
-
+       
     ### output
+    print('writing output...')
     with open(os.path.join(os.path.dirname(__file__), "../results/" + outfile) , 'w') as f:
         f.write('test_id' + '\t' + 'ARG_prediction' + '\t' + 'resistance_category' + '\t' + 'probability' + '\n')
         for idx, ele in enumerate(test):
