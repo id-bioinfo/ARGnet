@@ -9,8 +9,8 @@ os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 import tqdm
 
 #load model
-filterm = tf.keras.models.load_model(os.path.join(os.path.dirname(__file__), '../model/AESS.h5'))
-classifier = tf.keras.models.load_model(os.path.join(os.path.dirname(__file__), '../model/classifier_ss.h5'))
+filterm = tf.keras.models.load_model(os.path.join(os.path.dirname(__file__), '../model/AESS_tall.h5'))
+classifier = tf.keras.models.load_model(os.path.join(os.path.dirname(__file__), '../model/classifier-ss_tall.h5'))
 
 #encode, encode all the sequence to 1600 aa length
 char_dict = {}
@@ -129,10 +129,13 @@ def reconstruction_simi(pres, ori):
 cuts = [0.8064516129032258, 0.7666666666666667, 0.7752551020408163]
 def argnet_ssnt(input_file, outfile):
     testencode_pre = []
+    print('reading in test file...')
     test = [i for i in sio.parse(input_file, 'fasta')]
     test_ids = [ele.id for ele in test]
     #arg_encode, record_notpre, record_pre, encodeall_dict, ori = test_encode(arg, i[-1])
+    print('encoding test file...')
     testencode, not_pre, pre, encodeall_dict, ori  = test_encode(test)
+    print('making prediction...')
     for num in range(0, len(testencode), 8192):
         testencode_pre += prediction(testencode[num:num+8192])
     #testencode_pre = prediction(testencode) # if huge volumn of seqs (~ millions) this will be change to create batch in advance 
@@ -171,6 +174,7 @@ def argnet_ssnt(input_file, outfile):
                 notpass_idx.append(index)
     
     ###classification
+    print('classifying...')
     train_data = [i for i in sio.parse(os.path.join(os.path.dirname(__file__), "../data/train.fasta"),'fasta')]
     train_labels = [ele.id.split('|')[3].strip() for ele in train_data]
     encodeder = LabelBinarizer()
@@ -188,6 +192,7 @@ def argnet_ssnt(input_file, outfile):
         out[ele] = [np.max(classifications[i]), label_dic[np.argmax(classifications[i])]]
 
     ### output
+    print('writing output...')
     with open(os.path.join(os.path.dirname(__file__), "../results/" + outfile) , 'w') as f:
         f.write('test_id' + '\t' + 'ARG_prediction' + '\t' + 'resistance_category' + '\t' + 'probability' + '\n')
         for idx, ele in enumerate(test):
@@ -199,8 +204,3 @@ def argnet_ssnt(input_file, outfile):
             if idx in notpass_idx:
                 f.write(test[idx].id + '\t')
                 f.write('non-ARG' + '\t' + '' + '\t' + '' + '\n')
-
-
-    
-    
-
