@@ -9,8 +9,8 @@ os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 import tqdm
 
 #load model
-filterm = tf.keras.models.load_model(os.path.join(os.path.dirname(__file__), '../model/AELS.h5'))
-classifier = tf.keras.models.load_model(os.path.join(os.path.dirname(__file__), '../model/classifier_ls.h5'))
+filterm = tf.keras.models.load_model(os.path.join(os.path.dirname(__file__), '../model/AELS_tall.h5'))
+classifier = tf.keras.models.load_model(os.path.join(os.path.dirname(__file__), '../model/classifier-ls_tall.h5'))
 
 #encode, encode all the sequence to 1600 aa length
 char_dict = {}
@@ -106,7 +106,7 @@ def prediction(seqs):
 def reconstruction_simi(pres, ori):
     simis = []
     reconstructs = []
-    for index, ele in enumerate(pres[0]):
+    for index, ele in enumerate(pres):
         length = 0
         if len(ori[index]) <= 1600:
             length = len(ori[index])
@@ -122,13 +122,24 @@ def reconstruction_simi(pres, ori):
         reconstructs.append(reconstruct)
     return reconstructs, simis
 
+def chunks(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
 
 def argnet_lsnt(input_file, outfile):
     cut = 0.2553725612
+    print('reading in test file...')
     test = [i for i in sio.parse(input_file, 'fasta')]
     test_ids = [ele.id for ele in test]
+    print('encoding test file...')
     testencode, trans = test_encode(test)
-    testencode_pre = filter_prediction_batch(testencode) # if huge volumn of seqs (~ millions) this will be change to create batch in advance 
+    testencode_pre1 = []
+    for ele in list(chunks(testencode, 10000)):
+        temp = filter_prediction_batch(ele) # if huge volumn of seqs (~ millions) this will be change to create batch in advance•
+        testencode_pre1.append(temp)
+    testencode_pre = np.vstack([item for sublist in testencode_pre1 for item in sublist])
+    print('reconstruct, simi...')
     reconstructs, simis = reconstruction_simi(testencode_pre, trans)
     passed_encode = [] ### notice list and np.array
     passed_idx = []
