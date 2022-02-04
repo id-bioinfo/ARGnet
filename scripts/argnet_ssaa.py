@@ -152,8 +152,3 @@ def argnet_ssaa(input_file, outfile):
             if idx in notpass_idx:
                 f.write(test[idx].id + '\t')
                 f.write('non-ARG' + '\t' + '' + '\t' + '' + '\n')
-
-
-    
-    
-
