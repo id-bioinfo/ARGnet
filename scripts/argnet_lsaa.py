@@ -9,8 +9,8 @@ os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 import tqdm
 
 #load model
-filterm = tf.keras.models.load_model(os.path.join(os.path.dirname(__file__), '../model/AELS.h5'))
-classifier = tf.keras.models.load_model(os.path.join(os.path.dirname(__file__), '../model/classifier_ls.h5'))
+filterm = tf.keras.models.load_model(os.path.join(os.path.dirname(__file__), '../model/AELS_tall.h5'))
+classifier = tf.keras.models.load_model(os.path.join(os.path.dirname(__file__), '../model/classifier-ls_tall.h5'))
 
 #encode, encode all the sequence to 1600 aa length
 char_dict = {}
@@ -120,7 +120,6 @@ def argnet_lsaa(input_file, outfile):
     print('batch predict...')
     testencode_pre1 = []
     for ele in list(chunks(testencode, 10000)):
-
         temp = filter_prediction_batch(ele) # if huge volumn of seqs (~ millions) this will be change to create batch in advance•
         testencode_pre1.append(temp)
     testencode_pre = np.vstack([item for sublist in testencode_pre1 for item in sublist])
@@ -169,8 +168,3 @@ def argnet_lsaa(input_file, outfile):
             if idx in notpass_idx:
                 f.write(test[idx].id + '\t')
                 f.write('non-ARG' + '\t' + '' + '\t' + '' + '\n')
-
-
-    
-    
-
