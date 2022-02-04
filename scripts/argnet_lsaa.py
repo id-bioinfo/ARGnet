@@ -140,6 +140,7 @@ def argnet_lsaa(input_file, outfile):
             notpass_idx.append(index)
     
     ###classification
+    print('classifying...')
     train_data = [i for i in sio.parse(os.path.join(os.path.dirname(__file__), "../data/train.fasta"),'fasta')]
     train_labels = [ele.id.split('|')[3].strip() for ele in train_data]
     encodeder = LabelBinarizer()
@@ -157,6 +158,7 @@ def argnet_lsaa(input_file, outfile):
         out[ele] = [np.max(classifications[i]), label_dic[np.argmax(classifications[i])]]
 
     ### output
+    print('writing output...')
     with open(os.path.join(os.path.dirname(__file__), "../results/" + outfile) , 'w') as f:
         f.write('test_id' + '\t' + 'ARG_prediction' + '\t' + 'resistance_category' + '\t' + 'probability' + '\n')
         for idx, ele in enumerate(test):
