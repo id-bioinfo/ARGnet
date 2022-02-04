@@ -9,8 +9,8 @@ os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 import tqdm
 
 #load model
-filterm = tf.keras.models.load_model(os.path.join(os.path.dirname(__file__), '../model/AESS.h5'))
-classifier = tf.keras.models.load_model(os.path.join(os.path.dirname(__file__), '../model/classifier_ss.h5'))
+filterm = tf.keras.models.load_model(os.path.join(os.path.dirname(__file__), '../model/AESS_tall.h5'))
+classifier = tf.keras.models.load_model(os.path.join(os.path.dirname(__file__), '../model/classifier-ss_tall.h5'))
 
 #encode, encode all the sequence to 1600 aa length
 char_dict = {}
