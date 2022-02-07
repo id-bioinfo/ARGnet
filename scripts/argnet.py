@@ -11,7 +11,7 @@ formatter_class=argparse.RawDescriptionHelpFormatter,
 description=textwrap.dedent("""\
     ARGNet: a deep nueral network for robust identification and annotation of antibiotic resistance genes.
    --------------------------------------------------------------------------------------------------------
-    The standlone program is at https:...
+    The standlone program is at https: https://github.com/patience111/ARGNet
     The online service is at https:...
     
     The input can be long amino acid sequences(full length/contigs), long nucleotide sequences, 
