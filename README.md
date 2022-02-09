@@ -14,6 +14,15 @@ Installation
 
       git clone https://github.com/patience111/ARGNet
 
+**Requirements:**
+---------------
+
+Biopython:  1.79
+tensorflow:  2.2.0, cuda10.2, cudnn7.6.5.32
+numpy:  1.18.5
+sklearn:  0.24.1
+tqdm:  4.56.0
+
 Quickstart Guide
 ----------------
   ***for full-length or contigs***</br>
