@@ -5,7 +5,7 @@ from sklearn.preprocessing import LabelBinarizer
 from tensorflow.keras.utils import to_categorical
 import random
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 import tqdm
 
 #load model
@@ -173,4 +173,3 @@ def argnet_lsaa(input_file, outfile):
                 if idx in notpass_idx:
                     f.write(test_chunk[idx].id + '\t')
                     f.write('non-ARG' + '\t' + '' + '\t' + '' + '\n')
-
