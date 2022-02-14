@@ -57,10 +57,10 @@ python3&nbsp;&nbsp;./scripts/argnet.py&nbsp;&nbsp;-i&nbsp;&nbsp;./tests/aa/long/
 
 **output** will be like: </br>
 ![alt text](https://github.com/patience111/ARGNet/blob/main/lsaa_prediction.png)</br>
-the first column "test_id" is the sequence label of the test sequnece.</br>
-the second column "ARG_prediction" is the "ARG" or "non-ARG" prediction of the input sequence.</br>
-the third column "resistance_category" is the classifition of the 36 antibiotics categories of the input sequence resisting to.</br>
-the last column "probability" is the classifition probability of the antibiotic predition of the input sequence by the model.
+the first column **test_id** is the sequence label of the test sequnece.</br>
+the second column **ARG_prediction** is the "ARG" or "non-ARG" prediction of the input sequence.</br>
+the third column **resistance_category** is the classifition of the 36 antibiotics categories of the input sequence resisting to.</br>
+the last column **probability** is the classifition probability of the antibiotic predition of the input sequence by the model.
 
 Contribute
 ----------
