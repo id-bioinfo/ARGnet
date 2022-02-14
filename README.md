@@ -5,7 +5,10 @@ a deep nueral network for robust identification and annotation of antibiotic res
 The input can be long amino acid sequences(full length/contigs), long nucleotide sequences, 
 short amino acid reads (30-50aa), short nucleotide reads (100-150nt) in fasta format.
 If your input is short reads you should assign 'argnet-s' model, or if your input is full-length/contigs
-you should assign 'argnet-l' to make the predict.
+you should assign 'argnet-l' to make the predict. </br>
+
+![alt text](https://github.com/patience111/ARGNet/blob/main/model_flow.png)</br>
+
 
 Installation
 ------------
