@@ -48,6 +48,14 @@ Quickstart Guide
                         the model to make the prediction </br></br>
   -on OUTNAME, --outname OUTNAME </br>
                         the name of results output </br></br>
+  
+ 
+Example
+----------
+if we predict the long amino acid contigs by using ARGNet-L model, we could use command line (if you are in ARGNet dirctory):</br></br>
+python3 ./scripts/argnet.py -i ./tests/aa/long/arg100p.fasta -t aa -m argnet-l -on argnet_lsaa_test.txt
+
+
 
 Hope you enjoy ARGNet journey, any problem please contact scpeiyao@gmail.com </br>
 
