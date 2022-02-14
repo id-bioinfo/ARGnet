@@ -53,7 +53,7 @@ Quickstart Guide
 Example
 ----------
 if we predict the long amino acid contigs by using ARGNet-L model, we could use command line (if you are in ARGNet dirctory):</br></br>
-python3&nbsp;./scripts/argnet.py&nbsp;-i&nbsp;./tests/aa/long/arg100p.fasta&nbsp;-t&nbsp;aa&nbsp;-m&nbsp;argnet-l&nbsp;-on&nbsp;argnet_lsaa_test.txt
+python3&nbsp;&nbsp;./scripts/argnet.py&nbsp;&nbsp;-i&nbsp;&nbsp;./tests/aa/long/arg100p.fasta&nbsp;&nbsp;-t&nbsp&nbsp;;aa&nbsp;&nbsp;-m&nbsp;&nbsp;argnet-l&nbsp;&nbsp;-on&nbsp;&nbsp;argnet_lsaa_test.txt
 
 
 
