@@ -57,9 +57,10 @@ python3&nbsp;&nbsp;./scripts/argnet.py&nbsp;&nbsp;-i&nbsp;&nbsp;./tests/aa/long/
 
 
 
-Hope you enjoy ARGNet journey, any problem please contact scpeiyao@gmail.com </br>
+
 
 Contribute
 ----------
 
-If you'd like to contribute to ARGNet, check out https://github.com/patience111/argnet
+If you'd like to contribute to ARGNet, check out https://github.com/patience111/argnet</br>
+Hope you enjoy ARGNet journey, any problem please contact scpeiyao@gmail.com
