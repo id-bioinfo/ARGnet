@@ -1,6 +1,6 @@
 ARGNet
 ======
-a deep nueral network for robust identification and annotation of antibiotic resistance genes.
+A deep nueral network for robust identification and annotation of antibiotic resistance genes.
 
 The input can be long amino acid sequences(full length/contigs), long nucleotide sequences, 
 short amino acid reads (30-50aa), short nucleotide reads (100-150nt) in fasta format.
