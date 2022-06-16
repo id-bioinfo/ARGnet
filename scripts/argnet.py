@@ -44,25 +44,22 @@ parser.add_argument('-on', '--outname', required=True, help='the name of results
 
 args = parser.parse_args()
 
-import argnet_lsaa as lsaa
-import argnet_lsnt as lsnt
-import argnet_ssaa as ssaa
-import argnet_ssnt as ssnt
-
 ## for AESS_aa -> classifier
 if args.type == 'aa' and args.model == 'argnet-s':
+    import argnet_ssaa_chunk as ssaa
     ssaa.argnet_ssaa(args.input, args.outname)
 
 # for AESS_nt -> classifier
 if args.type == 'nt' and args.model == 'argnet-s':
+    import argnet_ssnt as ssnt
     ssnt.argnet_ssnt(args.input, args.outname)
 
 # for AELS_aa -> classifier
 if args.type == 'aa' and args.model == 'argnet-l':
+    import argnet_lsaa as lsaa
     lsaa.argnet_lsaa(args.input, args.outname)
 
 # for AELS_nt -> classifier
 if args.type == 'nt' and args.model == 'argnet-l':
+    import argnet_lsnt as lsnt
     lsnt.argnet_lsnt(args.input, args.outname)
-
-
