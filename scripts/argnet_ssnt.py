@@ -5,12 +5,31 @@ from sklearn.preprocessing import LabelBinarizer
 from tensorflow.keras.utils import to_categorical
 import random
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '1'
+#os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 import tqdm
+import cProfile, pstats, io
 
-#load model
-filterm = tf.keras.models.load_model(os.path.join(os.path.dirname(__file__), '../model/AESS.h5'))
-classifier = tf.keras.models.load_model(os.path.join(os.path.dirname(__file__), '../model/classifier_ss.h5'))
+#def profile(fnc):
+#    
+#    """A decorator that uses cProfile to profile a function"""
+#    
+#    def inner(*args, **kwargs):
+#        
+#        pr = cProfile.Profile()
+#        pr.enable()
+#        retval = fnc(*args, **kwargs)
+#        pr.disable()
+#        s = io.StringIO()
+#        sortby = 'cumulative'
+#        ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+#        ps.print_stats()
+#        print(s.getvalue())
+#        return retval
+#
+#    return inner
+#model
+filterm = tf.keras.models.load_model(os.path.join(os.path.dirname(__file__), './model/AESS_tall.h5'))
+classifier = tf.keras.models.load_model(os.path.join(os.path.dirname(__file__), './model/classifier-ss_tall.h5'))
 
 #encode, encode all the sequence to 1600 aa length
 char_dict = {}
@@ -55,12 +74,9 @@ def test_newEncodeVaryLength(tests):
 def encode64(seq):
     char = 'ACDEFGHIKLMNPQRSTVWXY'
     dimension1 = 64
-    train_array = np.zeros((dimension1, 22))
-    for i in range(dimension1):
-        if i < len(seq):
-            train_array[i] = char_dict[seq[i]]
-        else:
-            train_array[i][21] = 1
+    pad = np.array(21*[0] + [1])
+    time = dimension1-len(seq)
+    train_array = np.stack([char_dict[c] for c in seq]+[pad]*(time))
     return train_array
 
 def testencode64(seqs):
@@ -81,8 +97,8 @@ def test_encode(seqs):
     #length = length
     for idx, seq in tqdm.tqdm(enumerate(seqs)):
         #/print(seq.id)
-        temp = [seq.seq.translate(), seq.seq[1:].translate(), seq.seq[2:].translate(), seq.seq.reverse_complement().translate(),
-                seq.seq.reverse_complement()[1:].translate(), seq.seq.reverse_complement()[2:].translate()]
+        rc = seq.seq.reverse_complement()
+        temp = [seq.seq.translate(), seq.seq[1:].translate(), seq.seq[2:].translate(), rc.translate(), rc[1:].translate(), rc[2:].translate()]
         temp_split = []
         for ele in temp:
             if "*" in ele:
@@ -107,7 +123,7 @@ def test_encode(seqs):
 
 def prediction(seqs):
     predictions = []
-    temp = filterm.predict(seqs, batch_size=8192)
+    temp = filterm.predict(seqs, batch_size=8196)
     predictions.append(temp)
     return predictions
 
@@ -127,14 +143,16 @@ def reconstruction_simi(pres, ori):
     return reconstructs, simis
 
 cuts = [0.8064516129032258, 0.7666666666666667, 0.7752551020408163]
+
+#@profile
 def argnet_ssnt(input_file, outfile):
     testencode_pre = []
     test = [i for i in sio.parse(input_file, 'fasta')]
     test_ids = [ele.id for ele in test]
     #arg_encode, record_notpre, record_pre, encodeall_dict, ori = test_encode(arg, i[-1])
     testencode, not_pre, pre, encodeall_dict, ori  = test_encode(test)
-    for num in range(0, len(testencode), 8192):
-        testencode_pre += prediction(testencode[num:num+8192])
+    for num in range(0, len(testencode), 8196):
+        testencode_pre += prediction(testencode[num:num+8196])
     #testencode_pre = prediction(testencode) # if huge volumn of seqs (~ millions) this will be change to create batch in advance 
     pre_con = np.concatenate(testencode_pre)
     #print("the encode shape is: ", pre_con.shape)
@@ -171,7 +189,7 @@ def argnet_ssnt(input_file, outfile):
                 notpass_idx.append(index)
     
     ###classification
-    train_data = [i for i in sio.parse(os.path.join(os.path.dirname(__file__), "../data/train.fasta"),'fasta')]
+    train_data = [i for i in sio.parse(os.path.join(os.path.dirname(__file__), "./data/train.fasta"),'fasta')]
     train_labels = [ele.id.split('|')[3].strip() for ele in train_data]
     encodeder = LabelBinarizer()
     encoded_train_labels = encodeder.fit_transform(train_labels)
@@ -181,14 +199,14 @@ def argnet_ssnt(input_file, outfile):
         label_dic[index] = ele
 
     classifications = []
-    classifications = classifier.predict(np.stack(passed_encode, axis=0), batch_size = 2048) 
+    classifications = classifier.predict(np.stack(passed_encode, axis=0), batch_size = 3500) 
 
     out = {}
     for i, ele in enumerate(passed_idx):
         out[ele] = [np.max(classifications[i]), label_dic[np.argmax(classifications[i])]]
 
     ### output
-    with open(os.path.join(os.path.dirname(__file__), "../results/" + outfile) , 'w') as f:
+    with open(os.path.join(os.path.dirname(__file__), "./results/" + outfile) , 'w') as f:
         f.write('test_id' + '\t' + 'ARG_prediction' + '\t' + 'resistance_category' + '\t' + 'probability' + '\n')
         for idx, ele in enumerate(test):
             if idx in passed_idx:
