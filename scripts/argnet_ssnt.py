@@ -74,9 +74,15 @@ def test_newEncodeVaryLength(tests):
 def encode64(seq):
     char = 'ACDEFGHIKLMNPQRSTVWXY'
     dimension1 = 64
-    pad = np.array(21*[0] + [1])
-    time = dimension1-len(seq)
-    train_array = np.stack([char_dict[c] for c in seq]+[pad]*(time))
+    #pad = np.array(21*[0] + [1])
+    #time = dimension1-len(seq)
+    #train_array = np.stack([char_dict[c] for c in seq]+[pad]*(time))
+    train_array = np.zeros((dimension1, 22))
+    for i in range(dimension1):
+        if i < len(seq):
+            train_array[i] = char_dict[seq[i]]
+        else:
+            train_array[i][21] = 1
     return train_array
 
 def testencode64(seqs):
