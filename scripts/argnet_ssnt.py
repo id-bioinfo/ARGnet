@@ -8,6 +8,7 @@ import os
 #os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 import tqdm
 import cProfile, pstats, io
+import Bio.Data.CodonTable as bdc
 
 #def profile(fnc):
 #    
@@ -90,6 +91,19 @@ def testencode64(seqs):
     encode = np.array(encode)
     return encode
 
+codon_table = bdc.ambiguous_generic_by_name['Standard']
+forwardT = codon_table.forward_table
+def translate(seq):
+    aa = ''
+    for i in range(0, len(seq)-len(seq)%3, 3):
+        codon = seq[i:i+3]
+        print(codon)
+        try:
+            aa += forwardT[codon]
+        except:
+            aa += '*'
+    return aa
+
 def test_encode(seqs):
     """
     input as a list of test sequences
@@ -103,8 +117,10 @@ def test_encode(seqs):
     #length = length
     for idx, seq in tqdm.tqdm(enumerate(seqs)):
         #/print(seq.id)
+        seqf = seq.seq
         rc = seq.seq.reverse_complement()
-        temp = [seq.seq.translate(), seq.seq[1:].translate(), seq.seq[2:].translate(), rc.translate(), rc[1:].translate(), rc[2:].translate()]
+        temp = [translate(seqf), translate(seqf[1:]), translate(seqf[2:]), translate(rc), translate(rc[1:]), translate(rc[2:])]
+        #temp = [seq.seq.translate(), seq.seq[1:].translate(), seq.seq[2:].translate(), rc.translate(), rc[1:].translate(), rc[2:].translate()]
         temp_split = []
         for ele in temp:
             if "*" in ele:
@@ -121,7 +137,7 @@ def test_encode(seqs):
             record_pre[seq.id] = idx
             ori.extend(temp_seq)
             encode = testencode64(temp_seq)
-            encodeall_dict[seq.id] = list(range(start, start + len(temp_seq)))
+            encodeall_dict[seq.id] = (start, start + len(temp_seq))
             encodeall.extend(encode)
             start += len(temp_seq)
     encodeall = np.array(encodeall)
@@ -133,20 +149,23 @@ def prediction(seqs):
     predictions.append(temp)
     return predictions
 
+
 def reconstruction_simi(pres, ori):
     simis = []
     reconstructs = []
-    for index, ele in enumerate(pres):
+    argmax_pre = np.argmax(pres, axis=2)
+    for index, ele in enumerate(argmax_pre):
         length = len(ori[index])
         count_simi = 0
-        reconstruct = ''
+        #reconstruct = ''
         for pos in range(length):
-            if chars[np.argmax(ele[pos])] == ori[index][pos]:
+            if chars[ele[pos]] == ori[index][pos]:
                 count_simi += 1
-            reconstruct += chars[np.argmax(ele[pos])]
+            #reconstruct += chars[np.argmax(ele[pos])]
         simis.append(count_simi / length)
-        reconstructs.append(reconstruct)
-    return reconstructs, simis
+        #reconstructs.append(reconstruct)
+    return simis
+
 
 cuts = [0.8064516129032258, 0.7666666666666667, 0.7752551020408163]
 
@@ -163,43 +182,42 @@ def argnet_ssnt(input_file, outfile):
     pre_con = np.concatenate(testencode_pre)
     #print("the encode shape is: ", pre_con.shape)
     #print("the num of origin seqs is: ", len(ori))
-    reconstructs, simis = reconstruction_simi(pre_con, ori)
+    simis = reconstruction_simi(pre_con, ori)
     passed_encode = [] ### notice list and np.array
     passed_idx = []
     notpass_idx = []
-    print(len(simis) == len(ori))
+    assert len(simis) == len(ori)
     simis_edit = []
     count_iter = 0
+
     for k, v in encodeall_dict.items():
-        simis_edit.append(max(simis[v[0]:v[-1]+1]))
+        simis_edit.append(max(simis[v[0]:v[-1]]))
         count_iter += 1
     for index, ele in enumerate(simis_edit):
-        if len(test[index]) in range(100, 120):
-            if ele >= cuts[0]:
-            #passed.append(test[index])
-                passed_encode.append(testencode[index])
-                passed_idx.append(index)
-            else:
-                notpass_idx.append(index)
-        if len(test[index]) in range(120, 150):
-            if ele >= cuts[1]:
-                passed_encode.append(testencode[index])
-                passed_idx.append(index) 
-            else:
-                notpass_idx.append(index)          
-        if len(test[index]) == 150:
-            if ele >= cuts[-1]:
-                passed_encode.append(testencode[index])
-                passed_idx.append(index)
-            else:                
-                notpass_idx.append(index)
-    
+        if len(test[index]) < 120:
+            cuts_idx = 0
+        elif len(test[index]) < 150:
+            cuts_idx = 1
+        else:
+            cuts_idx = 2
+        if ele >= cuts[cuts_idx]:
+            passed_encode.append(testencode[index])
+            passed_idx.append(index)
+        else:
+            notpass_idx.append(index)
+
     ###classification
-    train_data = [i for i in sio.parse(os.path.join(os.path.dirname(__file__), "./data/train.fasta"),'fasta')]
-    train_labels = [ele.id.split('|')[3].strip() for ele in train_data]
-    encodeder = LabelBinarizer()
-    encoded_train_labels = encodeder.fit_transform(train_labels)
-    prepare = sorted(list(set(train_labels)))
+    #train_data = [i for i in sio.parse(os.path.join(os.path.dirname(__file__), "./data/train.fasta"),'fasta')]
+    #train_labels = [ele.id.split('|')[3].strip() for ele in train_data]
+    #encodeder = LabelBinarizer()
+    #encoded_train_labels = encodeder.fit_transform(train_labels)
+
+    train_labels = ['beta-lactam', 'multidrug', 'bacitracin', 'MLS', 'aminoglycoside', 'polymyxin', 'tetracycline',
+ 'fosfomycin', 'chloramphenicol', 'glycopeptide', 'quinolone', 'peptide','sulfonamide', 'trimethoprim', 'rifamycin',
+ 'qa_compound', 'aminocoumarin', 'kasugamycin', 'nitroimidazole', 'streptothricin', 'elfamycin', 'fusidic_acid',
+ 'mupirocin', 'tetracenomycin', 'pleuromutilin', 'bleomycin', 'triclosan', 'ethambutol', 'isoniazid', 'tunicamycin',
+ 'nitrofurantoin', 'puromycin', 'thiostrepton', 'pyrazinamide', 'oxazolidinone', 'fosmidomycin']
+    prepare = sorted(train_labels)
     label_dic = {}
     for index, ele in enumerate(prepare):
         label_dic[index] = ele
@@ -208,8 +226,11 @@ def argnet_ssnt(input_file, outfile):
     classifications = classifier.predict(np.stack(passed_encode, axis=0), batch_size = 3500) 
 
     out = {}
+
+    classification_argmax = np.argmax(classifications, axis=1)
+    classification_max = np.max(classifications, axis=1)
     for i, ele in enumerate(passed_idx):
-        out[ele] = [np.max(classifications[i]), label_dic[np.argmax(classifications[i])]]
+        out[ele] = [classification_max[i], label_dic[classification_argmax[i]]]
 
     ### output
     with open(os.path.join(os.path.dirname(__file__), "./results/" + outfile) , 'w') as f:
@@ -223,8 +244,3 @@ def argnet_ssnt(input_file, outfile):
             if idx in notpass_idx:
                 f.write(test[idx].id + '\t')
                 f.write('non-ARG' + '\t' + '' + '\t' + '' + '\n')
-
-
-    
-    
-
