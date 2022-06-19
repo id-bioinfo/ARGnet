@@ -9,6 +9,8 @@ import os
 import tqdm
 import cProfile, pstats, io
 import Bio.Data.CodonTable as bdc
+from itertools import product
+from kito import reduce_keras_model
 
 #def profile(fnc):
 #    
@@ -31,6 +33,8 @@ import Bio.Data.CodonTable as bdc
 #model
 filterm = tf.keras.models.load_model(os.path.join(os.path.dirname(__file__), './model/AESS_tall.h5'))
 classifier = tf.keras.models.load_model(os.path.join(os.path.dirname(__file__), './model/classifier-ss_tall.h5'))
+filterm_reduced = reduce_keras_model(filterm)
+classifier_reduced = reduce_keras_model(classifier)
 
 #encode, encode all the sequence to 1600 aa length
 char_dict = {}
@@ -91,18 +95,86 @@ def testencode64(seqs):
     encode = np.array(encode)
     return encode
 
-codon_table = bdc.ambiguous_generic_by_name['Standard']
-forwardT = codon_table.forward_table
+comprehensive_coden_table = {
+    "UUU":"F", "UUC":"F", "UUA":"L", "UUG":"L",
+    "UCU":"S", "UCC":"S", "UCA":"S", "UCG":"S",
+    "UAU":"Y", "UAC":"Y", "UAA":"*", "UAG":"*",
+    "UGU":"C", "UGC":"C", "UGA":"*", "UGG":"W",
+    "CUU":"L", "CUC":"L", "CUA":"L", "CUG":"L",
+    "CCU":"P", "CCC":"P", "CCA":"P", "CCG":"P",
+    "CAU":"H", "CAC":"H", "CAA":"Q", "CAG":"Q",
+    "CGU":"R", "CGC":"R", "CGA":"R", "CGG":"R",
+    "AUU":"I", "AUC":"I", "AUA":"I", "AUG":"M",
+    "ACU":"T", "ACC":"T", "ACA":"T", "ACG":"T",
+    "AAU":"N", "AAC":"N", "AAA":"K", "AAG":"K",
+    "AGU":"S", "AGC":"S", "AGA":"R", "AGG":"R",
+    "GUU":"V", "GUC":"V", "GUA":"V", "GUG":"V",
+    "GCU":"A", "GCC":"A", "GCA":"A", "GCG":"A",
+    "GAU":"D", "GAC":"D", "GAA":"E", "GAG":"E",
+    "GGU":"G", "GGC":"G", "GGA":"G", "GGG":"G",
+    "TTT":"F", "TTC":"F", "TTA":"L", "TTG":"L",
+    "TCT":"S", "TCC":"S", "TCA":"S", "TCG":"S",
+    "TAT":"Y", "TAC":"Y", "TAA":"*", "TAG":"*",
+    "TGT":"C", "TGC":"C", "TGA":"*", "TGG":"W",
+    "CTT":"L", "CTC":"L", "CTA":"L", "CTG":"L",
+    "CCT":"P", "CAT":"H", "CGT":"R", "ATT":"I", 
+    "ATC":"I", "ATA":"I", "ATG":"M", "ACT":"T",
+    "AAT":"N", "AGT":"S", "GTT":"V", "GTC":"V", 
+    "GTA":"V", "GTG":"V", "GCT":"A", "GAT":"D",
+    "GGT":"G", 'aaa': 'K', 'aac': 'N','aag': 'K',
+    'aat': 'N', 'aau': 'N', 'aca': 'T', 'acc': 'T',
+    'acg': 'T', 'act': 'T', 'acu': 'T', 'aga': 'R',
+    'agc': 'S', 'agg': 'R', 'agt': 'S', 'agu': 'S',
+    'ata': 'I', 'atc': 'I', 'atg': 'M', 'att': 'I',
+    'aua': 'I', 'auc': 'I', 'aug': 'M', 'auu': 'I',
+    'caa': 'Q', 'cac': 'H', 'cag': 'Q', 'cat': 'H',
+    'cau': 'H', 'cca': 'P', 'ccc': 'P', 'ccg': 'P',
+    'cct': 'P', 'ccu': 'P', 'cga': 'R', 'cgc': 'R',
+    'cgg': 'R', 'cgt': 'R', 'cgu': 'R', 'cta': 'L',
+    'ctc': 'L', 'ctg': 'L', 'ctt': 'L', 'cua': 'L',
+    'cuc': 'L', 'cug': 'L', 'cuu': 'L', 'gaa': 'E',
+    'gac': 'D', 'gag': 'E', 'gat': 'D', 'gau': 'D',
+    'gca': 'A', 'gcc': 'A', 'gcg': 'A', 'gct': 'A',
+    'gcu': 'A', 'gga': 'G', 'ggc': 'G', 'ggg': 'G',
+    'ggt': 'G', 'ggu': 'G', 'gta': 'V', 'gtc': 'V',
+    'gtg': 'V', 'gtt': 'V', 'gua': 'V', 'guc': 'V',
+    'gug': 'V', 'guu': 'V', 'taa': '*', 'tac': 'Y',
+    'tag': '*', 'tat': 'Y', 'tca': 'S', 'tcc': 'S',
+    'tcg': 'S', 'tct': 'S', 'tga': '*', 'tgc': 'C',
+    'tgg': 'W', 'tgt': 'C', 'tta': 'L', 'ttc': 'F',
+    'ttg': 'L', 'ttt': 'F', 'uaa': '*', 'uac': 'Y',
+    'uag': '*', 'uau': 'Y', 'uca': 'S', 'ucc': 'S',
+    'ucg': 'S', 'ucu': 'S', 'uga': '*', 'ugc': 'C',
+    'ugg': 'W', 'ugu': 'C',  'uua': 'L', 'uuc': 'F',
+    'uug': 'L', 'uuu': 'F'}
+
+#codon_table = bdc.ambiguous_generic_by_name['Standard']
+#forwardT = codon_table.forward_table
+#for a in 'ACTGU':
+#    for b in 'ACTGU':
+#        for c in 'ACTGU':
+#            if a+b+c not in forwardT:
+#                forwardT[a+b+c] = "*"
+ambiguous = ["A","C","G","T","U","W","S","M","K","R","Y","B","D","H","V","N"]
+keywords = [''.join(i) for i in product(ambiguous, repeat = 3)]
+keywords_select = [ele for ele in keywords if ele not in comprehensive_coden_table.keys()]
+keywords_select_dict = {ele : 'X' for ele in keywords_select}
+keywords_select_lower_dict = {ele.lower() : 'X' for ele in keywords_select}
+
+finalT = {}
+finalT.update(comprehensive_coden_table)
+finalT.update(keywords_select_dict)
+finalT.update(keywords_select_lower_dict)
+
 def translate(seq):
-    aa = ''
-    for i in range(0, len(seq)-len(seq)%3, 3):
+    lenseq = len(seq)
+    aa = ['*']*(lenseq//3)
+    for i in range(0, lenseq-lenseq%3, 3):
         codon = seq[i:i+3]
-        #print(codon)
-        try:
-            aa += forwardT[codon]
-        except:
-            aa += '*'
-    return aa
+    #if codon in forwardT:
+        aa[i//3] = finalT[codon]
+    aastr = ''.join(aa)
+    return aastr
 
 def test_encode(seqs):
     """
@@ -117,8 +189,8 @@ def test_encode(seqs):
     #length = length
     for idx, seq in tqdm.tqdm(enumerate(seqs)):
         #/print(seq.id)
-        seqf = seq.seq
-        rc = seq.seq.reverse_complement()
+        seqf = str(seq.seq)
+        rc = str(seq.seq.reverse_complement())
         temp = [translate(seqf), translate(seqf[1:]), translate(seqf[2:]), translate(rc), translate(rc[1:]), translate(rc[2:])]
         #temp = [seq.seq.translate(), seq.seq[1:].translate(), seq.seq[2:].translate(), rc.translate(), rc[1:].translate(), rc[2:].translate()]
         temp_split = []
@@ -145,10 +217,9 @@ def test_encode(seqs):
 
 def prediction(seqs):
     predictions = []
-    temp = filterm.predict(seqs, batch_size=8196)
+    temp = filterm_reduced.predict(seqs, batch_size=8196)
     predictions.append(temp)
     return predictions
-
 
 def reconstruction_simi(pres, ori):
     simis = []
@@ -166,14 +237,13 @@ def reconstruction_simi(pres, ori):
         #reconstructs.append(reconstruct)
     return simis
 
-
 cuts = [0.8064516129032258, 0.7666666666666667, 0.7752551020408163]
 
 #@profile
 def argnet_ssnt(input_file, outfile):
     testencode_pre = []
     test = [i for i in sio.parse(input_file, 'fasta')]
-    test_ids = [ele.id for ele in test]
+    #test_ids = [ele.id for ele in test]
     #arg_encode, record_notpre, record_pre, encodeall_dict, ori = test_encode(arg, i[-1])
     testencode, not_pre, pre, encodeall_dict, ori  = test_encode(test)
     for num in range(0, len(testencode), 8196):
@@ -223,7 +293,7 @@ def argnet_ssnt(input_file, outfile):
         label_dic[index] = ele
 
     classifications = []
-    classifications = classifier.predict(np.stack(passed_encode, axis=0), batch_size = 3500) 
+    classifications = classifier_reduced.predict(np.stack(passed_encode, axis=0), batch_size = 3500) 
 
     out = {}
 
