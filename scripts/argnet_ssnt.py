@@ -97,7 +97,7 @@ def translate(seq):
     aa = ''
     for i in range(0, len(seq)-len(seq)%3, 3):
         codon = seq[i:i+3]
-        print(codon)
+        #print(codon)
         try:
             aa += forwardT[codon]
         except:
