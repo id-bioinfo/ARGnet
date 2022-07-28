@@ -11,7 +11,7 @@ formatter_class=argparse.RawDescriptionHelpFormatter,
 description=textwrap.dedent("""\
     ARGNet: a deep nueral network for robust identification and annotation of antibiotic resistance genes.
    --------------------------------------------------------------------------------------------------------
-    The standlone program is at https: https://github.com/patience111/ARGNet
+    The standlone program is at https:...
     The online service is at https:...
     
     The input can be long amino acid sequences(full length/contigs), long nucleotide sequences, 
@@ -44,6 +44,7 @@ parser.add_argument('-on', '--outname', required=True, help='the name of results
 
 args = parser.parse_args()
 
+
 ## for AESS_aa -> classifier
 if args.type == 'aa' and args.model == 'argnet-s':
     import argnet_ssaa_chunk as ssaa
@@ -56,10 +57,12 @@ if args.type == 'nt' and args.model == 'argnet-s':
 
 # for AELS_aa -> classifier
 if args.type == 'aa' and args.model == 'argnet-l':
-    import argnet_lsaa as lsaa
+    import argnet_lsaa_speed as lsaa
     lsaa.argnet_lsaa(args.input, args.outname)
 
 # for AELS_nt -> classifier
 if args.type == 'nt' and args.model == 'argnet-l':
     import argnet_lsnt as lsnt
     lsnt.argnet_lsnt(args.input, args.outname)
+
+
