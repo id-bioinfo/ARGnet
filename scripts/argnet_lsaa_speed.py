@@ -5,7 +5,7 @@ from sklearn.preprocessing import LabelBinarizer
 from tensorflow.keras.utils import to_categorical
 import random
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '1'
+os.environ['CUDA_VISIBLE_DEVICES'] = '3'
 import tqdm
 
 #load model
@@ -153,11 +153,15 @@ def argnet_lsaa(input_file, outfile):
     #encoded_train_labels = encodeder.fit_transform(train_labels)
 
         classifications = []
-        classifications = classifier.predict(np.stack(passed_encode, axis=0), batch_size = 512) 
-
-        out = {}
-        classification_argmax = np.argmax(classifications, axis=1)
-        classification_max = np.max(classifications, axis=1)
+        if len(passed_encode) > 0:
+            classifications = classifier.predict(np.stack(passed_encode, axis=0), batch_size = 512)
+            out = {}
+            classification_argmax = np.argmax(classifications, axis=1)
+            classification_max = np.max(classifications, axis=1)
+            
+        if len(passed_encode) == 0:
+            print('no seq passed!')
+            pass
 
         for i, ele in enumerate(passed_idx):
             out[ele] = [classification_max[i], label_dic[classification_argmax[i]]]
