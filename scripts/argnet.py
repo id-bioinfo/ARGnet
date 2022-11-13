@@ -52,12 +52,12 @@ if args.type == 'aa' and args.model == 'argnet-s':
 
 # for AESS_nt -> classifier
 if args.type == 'nt' and args.model == 'argnet-s':
-    import argnet_ssnt as ssnt
+    import  argnet_ssnt_new as ssnt
     ssnt.argnet_ssnt(args.input, args.outname)
 
 # for AELS_aa -> classifier
 if args.type == 'aa' and args.model == 'argnet-l':
-    import argnet_lsaa_speed as lsaa
+    import argnet_lsaa_speed_sgpu as lsaa
     lsaa.argnet_lsaa(args.input, args.outname)
 
 # for AELS_nt -> classifier
