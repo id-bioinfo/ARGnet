@@ -252,9 +252,11 @@ cut = 0.7827911272035696
 #@profile
 def argnet_ssnt(input_file, outfile):
     testencode_pre = []
+    print('reading in test file...')
     test = [i for i in sio.parse(input_file, 'fasta')]
     #test_ids = [ele.id for ele in test]
     #arg_encode, record_notpre, record_pre, encodeall_dict, ori = test_encode(arg, i[-1])
+    print('encoding test file...')
     testencode, not_pre, pre, encodeall_dict, ori  = test_encode(test)
     for num in range(0, len(testencode), 8196):
         testencode_pre += prediction(testencode[num:num+8196])
@@ -262,6 +264,7 @@ def argnet_ssnt(input_file, outfile):
     pre_con = np.concatenate(testencode_pre)
     #print("the encode shape is: ", pre_con.shape)
     #print("the num of origin seqs is: ", len(ori))
+    print('reconstruct, simi...')
     simis = reconstruction_simi(pre_con, ori)
     passed_encode = [] ### notice list and np.array
     passed_idx = []
@@ -295,6 +298,7 @@ def argnet_ssnt(input_file, outfile):
     #train_labels = [ele.id.split('|')[3].strip() for ele in train_data]
     #encodeder = LabelBinarizer()
     #encoded_train_labels = encodeder.fit_transform(train_labels)
+    print('classifying...')
     classifications = []
     if len(passed_encode) > 0:
         classifications = classifier.predict(np.stack(passed_encode, axis=0), batch_size = 3000)
@@ -310,6 +314,7 @@ def argnet_ssnt(input_file, outfile):
         out[ele] = [classification_max[i], label_dic[classification_argmax[i]]]
 
     ### output
+    print('writing output...')
     with open(os.path.join(os.path.dirname(__file__), "../results/" + outfile) , 'w') as f:
         f.write('test_id' + '\t' + 'ARG_prediction' + '\t' + 'resistance_category' + '\t' + 'probability' + '\n')
         for idx, ele in enumerate(test):
