@@ -105,33 +105,46 @@ def prediction(seqs):
 
 def reconstruction_simi(pres, ori):
     simis = []
-    reconstructs = []
-    for index, ele in enumerate(pres):
-        length = 0
-        if len(ori[index]) <= 1600:
-            length = len(ori[index])
-        else:
-            length = 1600
+#    reconstructs = []
+    argmax_pre = np.argmax(pres, axis=2)
+    for index, ele in enumerate(argmax_pre):
+        length = len(ori[index])
         count_simi = 0
-        reconstruct = ''
-        for pos in range(length):
-            if chars[np.argmax(ele[pos])] == ori[index][pos]:
+        if length >= 1600:
+            align = 1600
+        else:
+            align = length
+        count_simi = 0
+        #reconstruct = ''
+        for pos in range(align):
+            if chars[ele[pos]] == ori[index][pos]:
                 count_simi += 1
-            reconstruct += chars[np.argmax(ele[pos])]
+           #reconstruct += chars[np.argmax(ele[pos])]
         simis.append(count_simi / length)
-        reconstructs.append(reconstruct)
-    return reconstructs, simis
+        #reconstructs.append(reconstruct)
+    return simis
 
 def chunks(lst, n):
     """Yield successive n-sized chunks from lst."""
     for i in range(0, len(lst), n):
         yield lst[i:i + n]
 
+train_labels = ['beta-lactam', 'multidrug', 'bacitracin', 'MLS', 'aminoglycoside', 'polymyxin', 'tetracycline',
+'fosfomycin', 'chloramphenicol', 'glycopeptide', 'quinolone', 'peptide','sulfonamide', 'trimethoprim', 'rifamycin',
+'qa_compound', 'aminocoumarin', 'kasugamycin', 'nitroimidazole', 'streptothricin', 'elfamycin', 'fusidic_acid',
+'mupirocin', 'tetracenomycin', 'pleuromutilin', 'bleomycin', 'triclosan', 'ethambutol', 'isoniazid', 'tunicamycin',
+'nitrofurantoin', 'puromycin', 'thiostrepton', 'pyrazinamide', 'oxazolidinone', 'fosmidomycin']
+
+prepare = sorted(train_labels)
+label_dic = {}
+for index, ele in enumerate(prepare):
+    label_dic[index] = ele 
+
+
 def argnet_lsnt(input_file, outfile):
     cut = 0.2553725612
     print('reading in test file...')
     test = [i for i in sio.parse(input_file, 'fasta')]
-    test_ids = [ele.id for ele in test]
     print('encoding test file...')
     testencode, trans = test_encode(test)
     testencode_pre1 = []
@@ -140,7 +153,7 @@ def argnet_lsnt(input_file, outfile):
         testencode_pre1.append(temp)
     testencode_pre = np.vstack([item for sublist in testencode_pre1 for item in sublist])
     print('reconstruct, simi...')
-    reconstructs, simis = reconstruction_simi(testencode_pre, trans)
+    simis = reconstruction_simi(testencode_pre, trans)
     passed_encode = [] ### notice list and np.array
     passed_idx = []
     notpass_idx = []
@@ -154,22 +167,20 @@ def argnet_lsnt(input_file, outfile):
     
     ###classification
     print('classifying...')
-    train_data = [i for i in sio.parse(os.path.join(os.path.dirname(__file__), "../data/train.fasta"),'fasta')]
-    train_labels = [ele.id.split('|')[3].strip() for ele in train_data]
-    encodeder = LabelBinarizer()
-    encoded_train_labels = encodeder.fit_transform(train_labels)
-    prepare = sorted(list(set(train_labels)))
-    label_dic = {}
-    for index, ele in enumerate(prepare):
-        label_dic[index] = ele
 
     classifications = []
-    classifications = classifier.predict(np.stack(passed_encode, axis=0), batch_size = 512) 
+    if len(passed_encode) > 0:
+        classifications = classifier.predict(np.stack(passed_encode, axis=0), batch_size = 512)
+        out = {}
+        classification_argmax = np.argmax(classifications, axis=1)
+        classification_max = np.max(classifications, axis=1)
 
-    out = {}
+    if len(passed_encode) == 0:
+        print('no seq passed!')
+        pass
+    
     for i, ele in enumerate(passed_idx):
-        out[ele] = [np.max(classifications[i]), label_dic[np.argmax(classifications[i])]]
-
+        out[ele] = [classification_max[i], label_dic[classification_argmax[i]]]
     ### output
     print('writing output...')
     with open(os.path.join(os.path.dirname(__file__), "../results/" + outfile) , 'w') as f:
