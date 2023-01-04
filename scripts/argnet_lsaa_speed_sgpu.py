@@ -177,4 +177,6 @@ def argnet_lsaa(input_file, outfile):
                 f.write('ARG' + '\t')
                 f.write(out[idx][-1] + '\t')
                 f.write(str(out[idx][0]) + '\n')
-
+            if idx in notpass_idx:
+                f.write(test[idx].id + '\t')
+                f.write('non-ARG' + '\t' + '' + '\t' + '' + '\n')
