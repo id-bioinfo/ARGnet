@@ -22,8 +22,8 @@ Installation
 The programs were test with the following package version, you can install exactly the same version or other compatible versions.</br>
 Biopython:  1.79 </br>
 tensorflow:  2.2.0 </br> 
-cuda: 10.2</br> 
-cudnn: 7.6.5.32</br>
+cuda: 10.2 (for GPU using)</br> 
+cudnn: 7.6.5.32 (for GPU using)</br>
 numpy: 1.18.5</br>
 sklearn: 0.24.1</br>
 tqdm: 4.56.0</br>
