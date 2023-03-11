@@ -1,0 +1,33 @@
+Job ID : 18739.hpc-hn001
+============== argnet_ssnt_test : CPUs ====================
+Job Start  Time is 2023/03/10 -- 18:32:47
+/cm/shared/apps/tensorflow2-py37-cuda10.2-gcc/2.2.0/lib64/python3.7/site-packages/:/cm/shared/apps/tensorflow2-py37-cuda10.2-gcc/2.2.0/lib/python3.7/site-packages/:/cm/shared/apps/ml-pythondeps-py37-cuda10.2-gcc/4.3.9/safeimport:/home/d24h_prog2/.conda/envs/argnet/lib/python3.7/site-packages/
+usage: ARGNet [-h]
+
+ ARGNet: a deep nueral network for robust identification and annotation of antibiotic resistance genes.
+--------------------------------------------------------------------------------------------------------
+ The standlone program is at https:...
+ The online service is at https:...
+
+ The input can be long amino acid sequences(full length/contigs), long nucleotide sequences, 
+ short amino acid reads (30-50aa), short nucleotide reads (100-150nt) in fasta format.
+ If your input is short reads you should assign 'argnet-s' model, or if your input is full-length/contigs
+ you should assign 'argnet-l' to make the predict.
+
+ USAGE:
+     for full-length or contigs
+         python argnet.py --input input_path_data --type aa/nt --model argnet-l  --outname output_file_name
+     for short reads
+         python argnet.py --input input_path_data --type aa/nt --model argnet-s  --outname output_file_name
+
+ general options:
+     --input/-i    the test file as input
+     --type/-t     molecular type of your test data (aa for amino acid, nt for nucleotide)
+     --model/-m    the model you assign to make the prediction (argnet-l for long sequences, argnet-s for short reads) 
+     --outname/-on  the output file name
+
+optional arguments:
+  -h, --help  show this help message and exit
+
+Hope you enjoy ARGNet journey, any problem please contact scpeiyao@gmail.com
+Job Finish Time is 2023/03/10 -- 18:32:51
