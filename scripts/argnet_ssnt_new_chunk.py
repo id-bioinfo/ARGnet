@@ -181,6 +181,7 @@ def test_encode(seqs):
     input as a list of test sequences
     """
     record_notpre = []
+    record_notpre_idx = []
     record_pre = {}
     encodeall_dict = {}
     encodeall = []
@@ -199,7 +200,7 @@ def test_encode(seqs):
                 temp_split.extend(ele.split('*'))
             else:
                 temp_split.append(ele)
-        temp_seq = [str(ele) for index, ele in enumerate(temp_split) if len(ele) >= 30]
+        temp_seq = [str(ele) for index, ele in enumerate(temp_split) if len(ele) >= 25]
         #print(len(temp_seq))
 
         if len(temp_seq) == 0:
@@ -213,7 +214,7 @@ def test_encode(seqs):
             encodeall.extend(encode)
             start += len(temp_seq)
     encodeall = np.array(encodeall)
-    return encodeall, record_notpre, record_pre, encodeall_dict, ori
+    return encodeall, record_notpre, record_notpre_idx, record_pre, encodeall_dict, ori
 
 def chunks(lst, n):
     """Yield successive n-sized chunks from lst."""
@@ -222,7 +223,7 @@ def chunks(lst, n):
 
 def prediction(seqs):
     predictions = []
-    temp = filterm.predict(seqs, batch_size=8196)
+    temp = filterm.predict(seqs, batch_size=8192)
     predictions.append(temp)
     return predictions
 
@@ -267,9 +268,9 @@ def argnet_ssnt(input_file, outfile):
     print('encoding test file...')
     for idx, test_chunk in enumerate(list(chunks(test, 10000))):
         testencode_pre = []
-        testencode, not_pre, pre, encodeall_dict, ori  = test_encode(test_chunk)
-        for num in range(0, len(testencode), 8196):
-            testencode_pre += prediction(testencode[num:num+8196])
+        testencode, not_pre, not_pre_idx, pre, encodeall_dict, ori  = test_encode(test_chunk)
+        for num in range(0, len(testencode), 8192):
+            testencode_pre += prediction(testencode[num:num+8192])
         #testencode_pre = prediction(testencode) # if huge volumn of seqs (~ millions) this will be change to create batch in advance 
         pre_con = np.concatenate(testencode_pre)
         #print("the encode shape is: ", pre_con.shape)
@@ -336,3 +337,6 @@ def argnet_ssnt(input_file, outfile):
                 if idx in notpass_idx:
                     f.write(test_chunk[idx].id + '\t')
                     f.write('non-ARG' + '\t' + '' + '\t' + '' + '\n')
+                if idx in not_pre_idx:
+                    f.write(test_chunk[idx].id + '\t')
+                    f.write('<25aa' + '\t' + '' + '\t' + '' + '\n')
