@@ -152,29 +152,31 @@ def argnet_lsaa(input_file, outfile):
             else:
                 notpass_idx.append(index)
     
-    ###classification
-    print('classifying...')
+        ###classification
+        print('classifying...')
         classifications = []
         if len(passed_encode) > 0:
             classifications = classifier.predict(np.stack(passed_encode, axis=0), batch_size = 512)
             out = {}
             classification_argmax = np.argmax(classifications, axis=1)
             classification_max = np.max(classifications, axis=1)
-            
+
         if len(passed_encode) == 0:
             print('no seq passed!')
             pass
 
         for i, ele in enumerate(passed_idx):
             out[ele] = [classification_max[i], label_dic[classification_argmax[i]]]
-        
+
         ### output
         print('writing output...')
         with open(os.path.join(os.path.dirname(__file__), "../results/" + outfile) , 'a') as f:
             for idx, ele in enumerate(test_chunk):
                 if idx in passed_idx:
-                    f.write(test[idx].id + '\t')
+                    f.write(test_chunk[idx].id + '\t')
                     f.write('ARG' + '\t')
                     f.write(out[idx][-1] + '\t')
                     f.write(str(out[idx][0]) + '\n')
-
+                if idx in notpass_idx:
+                    f.write(test_chunk[idx].id + '\t')
+                    f.write('non-ARG' + '\t' + '' + '\t' + '' + '\n')

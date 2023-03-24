@@ -7,7 +7,7 @@ short amino acid reads (30-50aa), short nucleotide reads (100-150nt) in fasta fo
 If your input is short reads you should assign 'argnet-s' model, or if your input is full-length/contigs
 you should assign 'argnet-l' to make the predict. </br>
 
-![alt text](https://github.com/patience111/ARGNet/blob/main/ARGNet_workflow.png)</br>
+![alt text](https://github.com/patience111/ARGNet/blob/main/pics/ARGNet_workflow.png)</br>
 
 
 Installation
@@ -22,8 +22,8 @@ Installation
 The programs were test with the following package version, you can install exactly the same version or other compatible versions.</br>
 Biopython:  1.79 </br>
 tensorflow:  2.2.0 </br> 
-cuda: 10.2</br> 
-cudnn: 7.6.5.32</br>
+cuda: 10.2 (for GPU using)</br> 
+cudnn: 7.6.5.32 (for GPU using)</br>
 numpy: 1.18.5</br>
 sklearn: 0.24.1</br>
 tqdm: 4.56.0</br>
@@ -59,7 +59,7 @@ if we predict the long amino acid contigs by using ARGNet-L model, we could use 
 **python3**&nbsp;&nbsp;./scripts/argnet.py&nbsp;&nbsp;**-i**&nbsp;&nbsp;./tests/aa/long/arg100p.fasta&nbsp;&nbsp;**-t**&nbsp;&nbsp;aa&nbsp;&nbsp;-m&nbsp;&nbsp;argnet-l&nbsp;&nbsp;**-on**&nbsp;&nbsp;argnet_lsaa_test.txt </br>
 
 **output** will be like: </br>
-![alt text](https://github.com/patience111/ARGNet/blob/main/lsaa_prediction.png)</br>
+![alt text](https://github.com/patience111/ARGNet/blob/main/pics/lsaa_prediction.png)</br>
 the first column **test_id** is the sequence label of the test sequnece.</br>
 the second column **ARG_prediction** is the "ARG" or "non-ARG" prediction of the input sequence.</br>
 the third column **resistance_category** is the classifition of the 36 antibiotics categories of the input sequence resisting to.</br>
