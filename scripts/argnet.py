@@ -52,7 +52,7 @@ if args.type == 'aa' and args.model == 'argnet-s':
 
 # for AESS_nt -> classifier
 if args.type == 'nt' and args.model == 'argnet-s':
-    import  argnet_ssnt_new as ssnt
+    import  argnet_ssnt_new_chunk as ssnt
     ssnt.argnet_ssnt(args.input, args.outname)
 
 # for AELS_aa -> classifier
