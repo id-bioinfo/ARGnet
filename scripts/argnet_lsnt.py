@@ -167,30 +167,35 @@ def argnet_lsnt(input_file, outfile):
     
     ###classification
     print('classifying...')
-
-    classifications = []
+    
     if len(passed_encode) > 0:
         classifications = classifier.predict(np.stack(passed_encode, axis=0), batch_size = 512)
-        out = {}
         classification_argmax = np.argmax(classifications, axis=1)
         classification_max = np.max(classifications, axis=1)
 
+    
+        out = {}
+        for i, ele in enumerate(passed_idx):
+            out[ele] = [classification_max[i], label_dic[classification_argmax[i]]]
+    ### output
+        print('writing output...')
+        with open(os.path.join(os.path.dirname(__file__), "../results/" + outfile) , 'w') as f:
+            f.write('test_id' + '\t' + 'ARG_prediction' + '\t' + 'resistance_category' + '\t' + 'probability' + '\n')
+            for idx, ele in enumerate(test):
+                if idx in passed_idx:
+                    f.write(test[idx].id + '\t')
+                    f.write('ARG' + '\t')
+                    f.write(out[idx][-1] + '\t')
+                    f.write(str(out[idx][0]) + '\n') 
+                if idx in notpass_idx:
+                    f.write(test[idx].id + '\t')
+                    f.write('non-ARG' + '\t' + '' + '\t' + '' + '\n')
+    
     if len(passed_encode) == 0:
         print('no seq passed!')
-        pass
-    
-    for i, ele in enumerate(passed_idx):
-        out[ele] = [classification_max[i], label_dic[classification_argmax[i]]]
-    ### output
-    print('writing output...')
-    with open(os.path.join(os.path.dirname(__file__), "../results/" + outfile) , 'w') as f:
-        f.write('test_id' + '\t' + 'ARG_prediction' + '\t' + 'resistance_category' + '\t' + 'probability' + '\n')
-        for idx, ele in enumerate(test):
-            if idx in passed_idx:
-                f.write(test[idx].id + '\t')
-                f.write('ARG' + '\t')
-                f.write(out[idx][-1] + '\t')
-                f.write(str(out[idx][0]) + '\n') 
-            if idx in notpass_idx:
+        with open(os.path.join(os.path.dirname(__file__), "../results/" + outfile) , 'w') as f:
+            f.write('test_id' + '\t' + 'ARG_prediction' + '\t' + 'resistance_category' + '\t' + 'probability' + '\n')
+            for idx, ele in enumerate(test):
                 f.write(test[idx].id + '\t')
                 f.write('non-ARG' + '\t' + '' + '\t' + '' + '\n')
+        #pass

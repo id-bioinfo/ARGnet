@@ -310,33 +310,36 @@ def argnet_ssnt(input_file, outfile):
         #encodeder = LabelBinarizer()
         #encoded_train_labels = encodeder.fit_transform(train_labels)
         print('classifying...')
-        classifications = []
         if len(passed_encode) > 0:
             classifications = classifier.predict(np.stack(passed_encode, axis=0), batch_size = 3000)
-            out = {}
             classification_argmax = np.argmax(classifications, axis=1)
             classification_max = np.max(classifications, axis=1)
 
-        if len(passed_encode) == 0:
-            print('no seq passed!')
-            pass
-
-        for i, ele in enumerate(passed_idx):
-            out[ele] = [classification_max[i], label_dic[classification_argmax[i]]]
+            out = {}
+            for i, ele in enumerate(passed_idx):
+                out[ele] = [classification_max[i], label_dic[classification_argmax[i]]]
 
         ### output
-        print('writing output...')
-        with open(os.path.join(os.path.dirname(__file__), "../results/" + outfile) , 'a') as f:
-            #f.write('test_id' + '\t' + 'ARG_prediction' + '\t' + 'resistance_category' + '\t' + 'probability' + '\n')
-            for idx, ele in enumerate(test_chunk):
-                if idx in passed_idx:
-                    f.write(test_chunk[idx].id + '\t')
-                    f.write('ARG' + '\t')
-                    f.write(out[idx][-1] + '\t')
-                    f.write(str(out[idx][0]) + '\n') 
-                if idx in notpass_idx:
+            print('writing output...')
+            with open(os.path.join(os.path.dirname(__file__), "../results/" + outfile) , 'a') as f:
+                #f.write('test_id' + '\t' + 'arg_prediction' + '\t' + 'resistance_category' + '\t' + 'probability' + '\n')
+                for idx, ele in enumerate(test_chunk):
+                    if idx in passed_idx:
+                        f.write(test_chunk[idx].id + '\t')
+                        f.write('ARG' + '\t')
+                        f.write(out[idx][-1] + '\t')
+                        f.write(str(out[idx][0]) + '\n') 
+                    if idx in notpass_idx:
+                        f.write(test_chunk[idx].id + '\t')
+                        f.write('non-ARG' + '\t' + '' + '\t' + '' + '\n')
+                    if idx in not_pre_idx:
+                        f.write(test_chunk[idx].id + '\t')
+                        f.write('<25aa' + '\t' + '' + '\t' + '' + '\n')
+        
+        if len(passed_encode) == 0:
+            print('no seq passed!')
+            with open(os.path.join(os.path.dirname(__file__), "../results/" + outfile) , 'a') as f:
+                for idx, ele in enumerate(test_chunk):
                     f.write(test_chunk[idx].id + '\t')
                     f.write('non-ARG' + '\t' + '' + '\t' + '' + '\n')
-                if idx in not_pre_idx:
-                    f.write(test_chunk[idx].id + '\t')
-                    f.write('<25aa' + '\t' + '' + '\t' + '' + '\n')
+            #pass
