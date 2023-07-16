@@ -43,6 +43,7 @@ Quickstart Guide
 
 **optional arguments:**</br>
   -h, --help            show this help message and exit</br></br>
+  ![alt text](https://github.com/patience111/ARGNet/blob/main/pics/ARGNet_help.jpeg)</br>
   -i INPUT, --input INPUT </br>
                         the test data as input </br></br>
   -t {aa,nt}, --type {aa,nt} </br>
