@@ -15,42 +15,52 @@ Installation
 clone the program to your local machine:</br>
 git clone https://github.com/patience111/ARGNet
 
-**1. Setting up environment**</br></br>
-   **1.1 Installation with conda**</br>
+
+**1. Setting up environment**
+
+
+**1.1 Installation with conda**
+
+
+1.1.1 For **CPU** inference, you could install the program with conda YAML file in the installation directory with the following commands:
+
+```
+cd ./installation 
+conda env create -f ARGNet-CPU.yml -n ARGNet-cpu
+conda activate ARGNet-cpu
+```
+
+(This was tested on Ubuntu 16.04)</br>
+  ![alt text](https://github.com/patience111/ARGNet/blob/main/pics/argnet_conda_cpu_trial.png)</br>
    
-   1.1.1 For **CPU** inference, you could install the program with conda YAML file in the installation directory with the following commands:</br>
-       cd ./installation </br>
-       conda env create -f ARGNet-CPU.yml -n ARGNet-cpu </br>
-       conda activate ARGNet-cpu </br>
    
-   (This was tested on Ubuntu 16.04)</br>
-   ![alt text](https://github.com/patience111/ARGNet/blob/main/pics/argnet_conda_cpu_trial.png)</br>
-   
-   
-   1.1.2 For **GPU** inference, you could install the program with conda YAML file in the installation directory with the following commands:</br>
-        cd ./installation</br>
-        conda env create -f ARGNet-GPU.yml -n ARGNet-gpu</br>
-        conda activate ARGNet-gpu</br>
-      
-    (This was tested on Ubuntu 16.04, cuda 10.1, Driver Version: 430.64)</br>
+1.1.2 For **GPU** inference, you could install the program with conda YAML file in the installation directory with the following commands:</br>
+```
+cd ./installation
+conda env create -f ARGNet-GPU.yml -n ARGNet-gpu
+conda activate ARGNet-gpu
+```
+(This was tested on Ubuntu 16.04, cuda 10.1, Driver Version: 430.64)</br>
     ![alt text](https://github.com/patience111/ARGNet/blob/main/pics/argnet_conda_gpu_trial.png)</br>
 
-   **1.2 Or, if you prefer installing dependencies manually**, you might find this information useful:</br>
+**1.2 Or, if you prefer installing dependencies manually**, you might find this information useful:</br>
       The program was tested with the following package version, you can install exactly the same version or other compatible versions.</br>
 
-      Biopython:  1.79 </br>
-      tensorflow:  2.2.0 </br> 
-      cuda: 10.2 (for GPU using)</br> 
-      cudnn: 7.6.5.32 (for GPU using)</br>
-      numpy: 1.18.5</br>
-      scikit-learn: 0.24.1</br>
-      tqdm: 4.56.0</br>
+```
+Biopython:  1.79
+tensorflow:  2.2.0 
+cuda: 10.2 (for GPU using)
+cudnn: 7.6.5.32 (for GPU using)
+numpy: 1.18.5
+scikit-learn: 0.24.1
+tqdm: 4.56.0
+```
 
 **2. Getting trained models**<br>
-   
-     cd ./model </br>
-     bash get-models.sh
-
+```   
+cd ./model
+bash get-models.sh
+```
 Quickstart Guide
 ----------------
   ***for full-length or contigs***</br>
