@@ -12,6 +12,9 @@ you should assign 'argnet-l' to make the predict. </br>
 
 Installation
 ------------
+clone the program to your local machine:</br>
+git clone https://github.com/patience111/ARGNet
+
 1. Installation with conda</br>
 1.1 For CPU inference, you could install the program with conda YAML file in the installation directory with the following commands:</br>
    cd ./installation </br>
@@ -35,7 +38,7 @@ Installation
       git clone https://github.com/patience111/ARGNet
 
    Requirements:</br>
-   The programs were test with the following package version, you can install exactly the same version or other compatible versions.</br>
+   The program was tested with the following package version, you can install exactly the same version or other compatible versions.</br>
    Biopython:  1.79 </br>
    tensorflow:  2.2.0 </br> 
    cuda: 10.2 (for GPU using)</br> 
@@ -44,7 +47,10 @@ Installation
    scikit-learn: 0.24.1</br>
    tqdm: 4.56.0</br>
 
-
+Get ARGNet models
+----------------
+cd ./model </br>
+bash get-models.sh
 
 Quickstart Guide
 ----------------
