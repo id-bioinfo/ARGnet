@@ -33,12 +33,9 @@ git clone https://github.com/patience111/ARGNet
       (This was tested on Ubuntu 16.04, cuda 10.1, Driver Version: 430.64)</br>
       ![alt text](https://github.com/patience111/ARGNet/blob/main/pics/argnet_conda_gpu_trial.png)</br>
 
-2. Or to install with git, run:
-
-      git clone https://github.com/patience111/ARGNet
-
-   Requirements:</br>
+2. Or, if you prefer installing dependencies manually, you might find this information useful:</br>
    The program was tested with the following package version, you can install exactly the same version or other compatible versions.</br>
+
    Biopython:  1.79 </br>
    tensorflow:  2.2.0 </br> 
    cuda: 10.2 (for GPU using)</br> 
@@ -47,8 +44,8 @@ git clone https://github.com/patience111/ARGNet
    scikit-learn: 0.24.1</br>
    tqdm: 4.56.0</br>
 
-Get ARGNet models
-----------------
+**Get ARGNet models**<br>
+
 cd ./model </br>
 bash get-models.sh
 
