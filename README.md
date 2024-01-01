@@ -44,7 +44,7 @@ git clone https://github.com/patience111/ARGNet
    scikit-learn: 0.24.1</br>
    tqdm: 4.56.0</br>
 
-  **3. Get ARGNet models**<br>
+   **3. Get ARGNet models**<br>
    
    cd ./model </br>
    bash get-models.sh
