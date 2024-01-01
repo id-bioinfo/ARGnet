@@ -34,7 +34,8 @@ Installation
 
       git clone https://github.com/patience111/ARGNet
 
-   *Requirements:*
+   Requirements:
+   
    ---------------
    The programs were test with the following package version, you can install exactly the same version or other compatible versions.</br>
    Biopython:  1.79 </br>
