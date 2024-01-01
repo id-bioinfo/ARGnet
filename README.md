@@ -17,10 +17,11 @@ git clone https://github.com/patience111/ARGNet
 
 **1. Setting up environment**</br></br>
    **1.1 Installation with conda**</br>
+   
    1.1.1 For **CPU** inference, you could install the program with conda YAML file in the installation directory with the following commands:</br>
-     cd ./installation </br>
-     conda env create -f ARGNet-CPU.yml -n ARGNet-cpu </br>
-     conda activate ARGNet-cpu </br>
+       cd ./installation </br>
+       conda env create -f ARGNet-CPU.yml -n ARGNet-cpu </br>
+       conda activate ARGNet-cpu </br>
    
    (This was tested on Ubuntu 16.04)</br>
    ![alt text](https://github.com/patience111/ARGNet/blob/main/pics/argnet_conda_cpu_trial.png)</br>
