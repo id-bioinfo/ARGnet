@@ -15,7 +15,7 @@ Installation
 clone the program to your local machine:</br>
 git clone https://github.com/patience111/ARGNet
 
-1. Setting up environment</br>
+**1. Setting up environment**</br>
    1.1 Installation with conda
    1.1.1 For CPU inference, you could install the program with conda YAML file in the installation directory with the following commands:</br>
    cd ./installation </br>
