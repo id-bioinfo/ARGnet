@@ -1,0 +1,13 @@
+name: argnet
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+  - r
+dependencies:
+- python=3.11
+- tensorflow=2.12
+- scikit-learn
+- tqdm=4.56.0
+- biopython=1.79
+- numpy=1.23.5
