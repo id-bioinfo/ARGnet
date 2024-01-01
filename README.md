@@ -96,8 +96,9 @@ python argnet.py --input input_path_data --type aa/nt --model argnet-s --outname
 Example
 ----------
 if we predict the long amino acid contigs by using ARGNet-L model, we could use command line (if you are in ARGNet dirctory):</br></br>
-**python3**&nbsp;&nbsp;./scripts/argnet.py&nbsp;&nbsp;**-i**&nbsp;&nbsp;./tests/aa/long/arg100p.fasta&nbsp;&nbsp;**-t**&nbsp;&nbsp;aa&nbsp;&nbsp;-m&nbsp;&nbsp;argnet-l&nbsp;&nbsp;**-on**&nbsp;&nbsp;argnet_lsaa_test.txt </br>
-
+```
+python3 ./scripts/argnet.py ./tests/aa/long/arg100p.fasta -t aa -m argnet-l -on argnet_lsaa_test.txt
+```
 **output** will be like: </br>
 ![alt text](https://github.com/patience111/ARGNet/blob/main/pics/lsaa_prediction.png)</br>
 the first column **test_id** is the sequence label of the test sequnece.</br>
