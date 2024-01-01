@@ -30,6 +30,7 @@ git clone https://github.com/patience111/ARGNet
       cd ./installation</br>
       conda env create -f ARGNet-GPU.yml -n ARGNet-gpu</br>
       conda activate ARGNet-gpu</br>
+      
       (This was tested on Ubuntu 16.04, cuda 10.1, Driver Version: 430.64)</br>
       ![alt text](https://github.com/patience111/ARGNet/blob/main/pics/argnet_conda_gpu_trial.png)</br>
 
@@ -46,8 +47,8 @@ git clone https://github.com/patience111/ARGNet
 
 **2. Getting trained models**<br>
    
-   cd ./model </br>
-   bash get-models.sh
+     cd ./model </br>
+     bash get-models.sh
 
 Quickstart Guide
 ----------------
