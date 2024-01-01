@@ -13,7 +13,7 @@ you should assign 'argnet-l' to make the predict. </br>
 Installation
 ------------
 1. Installation with conda</br>
-1.1 For CPU inference, you could install the program with conda YAML file in the installation directory.</br>
+1.1 For CPU inference, you could install the program with conda YAML file in the installation directory with the following commands:</br>
    cd ./installation </br>
    conda env create -f ARGNet-CPU.yml -n ARGNet-cpu </br>
    conda activate ARGNet-cpu </br>
@@ -22,7 +22,7 @@ Installation
    ![alt text](https://github.com/patience111/ARGNet/blob/main/pics/argnet_conda_cpu_trial.png)</br>
    
    
-   1.2 For GPU inference, you could install the program with conda YAML file in the installation directory.</br>
+   1.2 For GPU inference, you could install the program with conda YAML file in the installation directory with the following commands:</br>
       cd ./installation</br>
       conda env create -f ARGNet-GPU.yml -n ARGNet-gpu</br>
       conda activate ARGNet-gpu</br>
@@ -34,8 +34,7 @@ Installation
 
       git clone https://github.com/patience111/ARGNet
 
-   Requirements:
-   ---------------
+   Requirements:</br>
    The programs were test with the following package version, you can install exactly the same version or other compatible versions.</br>
    Biopython:  1.79 </br>
    tensorflow:  2.2.0 </br> 
