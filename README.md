@@ -15,9 +15,9 @@ Installation
 clone the program to your local machine:</br>
 git clone https://github.com/patience111/ARGNet
 
-**1. Setting up environment**</br>
-   1.1 Installation with conda
-   1.1.1 For CPU inference, you could install the program with conda YAML file in the installation directory with the following commands:</br>
+**1. Setting up environment**</br></br>
+   1.1 Installation with conda</br>
+   1.1.1 For **CPU** inference, you could install the program with conda YAML file in the installation directory with the following commands:</br>
    cd ./installation </br>
    conda env create -f ARGNet-CPU.yml -n ARGNet-cpu </br>
    conda activate ARGNet-cpu </br>
@@ -26,7 +26,7 @@ git clone https://github.com/patience111/ARGNet
    ![alt text](https://github.com/patience111/ARGNet/blob/main/pics/argnet_conda_cpu_trial.png)</br>
    
    
-   1.1.2 For GPU inference, you could install the program with conda YAML file in the installation directory with the following commands:</br>
+   1.1.2 For **GPU** inference, you could install the program with conda YAML file in the installation directory with the following commands:</br>
       cd ./installation</br>
       conda env create -f ARGNet-GPU.yml -n ARGNet-gpu</br>
       conda activate ARGNet-gpu</br>
