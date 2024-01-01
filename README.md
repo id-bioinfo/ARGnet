@@ -12,21 +12,21 @@ you should assign 'argnet-l' to make the predict. </br>
 
 Installation
 ------------
-1. Installation with conda
-1.1 For CPU inference, you could install the program with conda YAML file in the installation directory.
-   cd ./installation
-   conda env create -f ARGNet-CPU.yml -n ARGNet-cpu
-   conda activate ARGNet-cpu
+1. Installation with conda</br>
+1.1 For CPU inference, you could install the program with conda YAML file in the installation directory.</br>
+   cd ./installation </br>
+   conda env create -f ARGNet-CPU.yml -n ARGNet-cpu </br>
+   conda activate ARGNet-cpu </br>
    
-   (This was tested on Ubuntu 16.04)
+   (This was tested on Ubuntu 16.04)</br>
    ![alt text](https://github.com/patience111/ARGNet/blob/main/pics/argnet_conda_cpu_trial.png)</br>
    
    
-1.2 For GPU inference, you could install the program with conda YAML file in the installation directory.
-   cd ./installation
-   conda env create -f ARGNet-GPU.yml -n ARGNet-gpu
-   conda activate ARGNet-gpu
-   (This was tested on Ubuntu 16.04, cuda 10.1, Driver Version: 430.64)
+1.2 For GPU inference, you could install the program with conda YAML file in the installation directory.</br>
+   cd ./installation</br>
+   conda env create -f ARGNet-GPU.yml -n ARGNet-gpu</br>
+   conda activate ARGNet-gpu</br>
+   (This was tested on Ubuntu 16.04, cuda 10.1, Driver Version: 430.64)</br>
    ![alt text](https://github.com/patience111/ARGNet/blob/main/pics/argnet_conda_gpu_trial.png)</br>
 
 2. To install with git, run:
