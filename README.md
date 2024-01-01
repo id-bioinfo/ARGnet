@@ -63,10 +63,16 @@ bash get-models.sh
 ```
 Quickstart Guide
 ----------------
-  ***for full-length or contigs***</br>
-      **python**&nbsp;&nbsp; argnet.py **--input**&nbsp;&nbsp;input_path_data&nbsp;&nbsp;**--type**&nbsp;&nbsp; aa/nt&nbsp;&nbsp;**--model**&nbsp;&nbsp; argnet-l&nbsp;&nbsp;  **--outname**&nbsp;&nbsp; output_file_name </br></br>
-  ***for short reads***</br>
-      **python**&nbsp;&nbsp;argnet.py **--input**&nbsp;&nbsp;input_path_data&nbsp;&nbsp;**--type**&nbsp;&nbsp; aa/nt&nbsp;&nbsp;**--model**&nbsp;&nbsp; argnet-s&nbsp;&nbsp;  **--outname**&nbsp;&nbsp; output_file_name </br>
+***for long sequences***
+
+```
+python argnet.py --input input_path_data  --type aa/nt --model argnet-l  --outname output_file_name
+```
+***for short reads***
+
+```
+python argnet.py --input input_path_data --type aa/nt --model argnet-s --outname output_file_name
+```
     
 **general options:**</br>
      --input/-i&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the test file as input </br>
