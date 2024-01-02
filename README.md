@@ -97,7 +97,7 @@ Example
 ----------
 if we predict the long amino acid contigs by using ARGNet-L model, we could use command line (if you are in ARGNet dirctory):</br></br>
 ```
-python3 ./scripts/argnet.py ./tests/aa/long/arg100p.fasta -t aa -m argnet-l -on argnet_lsaa_test.txt
+python3 ./scripts/argnet.py -i ./tests/aa/long/arg100p.fasta -t aa -m argnet-l -on argnet_lsaa_test.txt
 ```
 **output** will be like and saved in the **results** folder: </br>
 ![alt text](https://github.com/patience111/ARGNet/blob/main/pics/lsaa_prediction.png)</br>
