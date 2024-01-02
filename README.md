@@ -99,7 +99,7 @@ if we predict the long amino acid contigs by using ARGNet-L model, we could use 
 ```
 python3 ./scripts/argnet.py ./tests/aa/long/arg100p.fasta -t aa -m argnet-l -on argnet_lsaa_test.txt
 ```
-**output** will be like and saved in the results folder: </br>
+**output** will be like and saved in the **results** folder: </br>
 ![alt text](https://github.com/patience111/ARGNet/blob/main/pics/lsaa_prediction.png)</br>
 the first column **test_id** is the sequence label of the test sequnece.</br>
 the second column **ARG_prediction** is the "ARG" or "non-ARG" prediction of the input sequence.</br>
