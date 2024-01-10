@@ -30,7 +30,7 @@ conda env create -f ARGNet-CPU.yml -n ARGNet-cpu
 conda activate ARGNet-cpu
 ```
 
-(This was tested on Ubuntu 16.04)</br>
+(This was tested on Ubuntu 16.04, 20.04; Windows 10, macOS(14.1.1))</br>
   ![alt text](https://github.com/patience111/ARGNet/blob/main/pics/argnet_conda_cpu_trial.png)</br>
    
    
