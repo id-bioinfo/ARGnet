@@ -1,3 +1,9 @@
+[![HKU Webapp](https://img.shields.io/badge/Open%20Webapp-c?style=flat&label=HKU
+)](https://argnet.hku.hk/) 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Ui2mVw8zwvwL8uVnjwDreHNAJK5n8RuA) 
+[![Open in Hugging Face Spaces](https://img.shields.io/badge/Open%20in%20HF%20spaces-c?style=flat&label=%F0%9F%A4%97
+)](https://huggingface.co/spaces/tracywong117/ARGnet-UI)
+
 ARGNet
 ======
 A deep neural network for robust identification and annotation of antibiotic resistance genes.
@@ -43,16 +49,6 @@ conda activate ARGNet-gpu
 (This was tested on Ubuntu 16.04, cuda 10.1, Driver Version: 430.64)</br>
     ![alt text](https://github.com/patience111/ARGNet/blob/main/pics/argnet_conda_gpu_trial.png)</br>
 
-**We also provide the colab link for users don't have local GPU but also want speeding up by GPU power**
-
-
-plese find the colab link and follow the instruction:
-
-
-https://colab.research.google.com/drive/1Ui2mVw8zwvwL8uVnjwDreHNAJK5n8RuA#scrollTo=IjDYLkxOgnMo
-
-
-(Thank Amos, Tracy, and Carlos for creating this link)
 
 **1.2 Or, if you prefer installing dependencies manually**, you might find this information useful:</br>
       The program was tested with the following package version, you can install exactly the same version or other compatible versions.</br>
