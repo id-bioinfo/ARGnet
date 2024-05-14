@@ -117,6 +117,10 @@ the second column **ARG_prediction** is the "ARG" or "non-ARG" prediction of the
 the third column **resistance_category** is the classifition of the 36 antibiotics categories of the input sequence resisting to.</br>
 the last column **probability** is the classifition probability of the antibiotic predition of the input sequence by the model.
 
+Citation
+----------
+Pei, Y., Shum, M.HH., Liao, Y. et al. ARGNet: using deep neural networks for robust identification and classification of antibiotic resistance genes from sequences. Microbiome 12, 84 (2024). https://doi.org/10.1186/s40168-024-01805-0
+
 Contribute
 ----------
 
