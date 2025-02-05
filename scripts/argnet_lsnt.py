@@ -142,60 +142,67 @@ for index, ele in enumerate(prepare):
 
 
 def argnet_lsnt(input_file, outfile):
+    
     cut = 0.2553725612
     print('reading in test file...')
     test = [i for i in sio.parse(input_file, 'fasta')]
-    print('encoding test file...')
-    testencode, trans = test_encode(test)
-    testencode_pre1 = []
-    for ele in list(chunks(testencode, 10000)):
-        temp = filter_prediction_batch(ele) # if huge volumn of seqs (~ millions) this will be change to create batch in advance•
+    
+    with open(os.path.join(os.path.dirname(__file__), "../results/" + outfile) , 'w') as f:
+        f.write('test_id' + '\t' + 'ARG_prediction' + '\t' + 'resistance_category' + '\t' + 'probability' + '\n')
+
+    #print('encoding test file...')
+    for idx, test_chunk in enumerate(list(chunks(test, 10000))):
+        print('encoding test file...')
+        testencode, trans = test_encode(test_chunk)
+        testencode_pre1 = []
+    #for ele in list(chunks(testencode, 10000)):
+        temp = filter_prediction_batch(testencode) # if huge volumn of seqs (~ millions) this will be change to create batch in advance•
         testencode_pre1.append(temp)
-    testencode_pre = np.vstack([item for sublist in testencode_pre1 for item in sublist])
-    print('reconstruct, simi...')
-    simis = reconstruction_simi(testencode_pre, trans)
-    passed_encode = [] ### notice list and np.array
-    passed_idx = []
-    notpass_idx = []
-    for index, ele in enumerate(simis):
-        if ele >= cut:
+        testencode_pre = np.vstack([item for sublist in testencode_pre1 for item in sublist])
+        print('reconstruct, simi...')
+        simis = reconstruction_simi(testencode_pre, trans)
+        passed_encode = [] ### notice list and np.array
+        passed_idx = []
+        notpass_idx = []
+        for index, ele in enumerate(simis):
+            if ele >= cut:
             #passed.append(test[index])
-            passed_encode.append(testencode[index])
-            passed_idx.append(index)
-        else:
-            notpass_idx.append(index)
+                passed_encode.append(testencode[index])
+                passed_idx.append(index)
+            else:
+                notpass_idx.append(index)
     
     ###classification
-    print('classifying...')
+            print('classifying...')
     
-    if len(passed_encode) > 0:
-        classifications = classifier.predict(np.stack(passed_encode, axis=0), batch_size = 512)
-        classification_argmax = np.argmax(classifications, axis=1)
-        classification_max = np.max(classifications, axis=1)
+        if len(passed_encode) > 0:
+            classifications = classifier.predict(np.stack(passed_encode, axis=0), batch_size = 512)
+            classification_argmax = np.argmax(classifications, axis=1)
+            classification_max = np.max(classifications, axis=1)
 
-    
-        out = {}
-        for i, ele in enumerate(passed_idx):
-            out[ele] = [classification_max[i], label_dic[classification_argmax[i]]]
-    ### output
-        print('writing output...')
-        with open(os.path.join(os.path.dirname(__file__), "../results/" + outfile) , 'w') as f:
-            f.write('test_id' + '\t' + 'ARG_prediction' + '\t' + 'resistance_category' + '\t' + 'probability' + '\n')
-            for idx, ele in enumerate(test):
-                if idx in passed_idx:
-                    f.write(test[idx].id + '\t')
-                    f.write('ARG' + '\t')
-                    f.write(out[idx][-1] + '\t')
-                    f.write(str(out[idx][0]) + '\n') 
-                if idx in notpass_idx:
+        
+            out = {}
+            for i, ele in enumerate(passed_idx):
+                out[ele] = [classification_max[i], label_dic[classification_argmax[i]]]
+        ### output
+            print('writing output...')
+            with open(os.path.join(os.path.dirname(__file__), "../results/" + outfile) , 'a') as f:
+               # f.write('test_id' + '\t' + 'ARG_prediction' + '\t' + 'resistance_category' + '\t' + 'probability' + '\n')
+                for idx, ele in enumerate(test):
+                    if idx in passed_idx:
+                        f.write(test[idx].id + '\t')
+                        f.write('ARG' + '\t')
+                        f.write(out[idx][-1] + '\t')
+                        f.write(str(out[idx][0]) + '\n') 
+                    if idx in notpass_idx:
+                        f.write(test[idx].id + '\t')
+                        f.write('non-ARG' + '\t' + '' + '\t' + '' + '\n')
+        
+        if len(passed_encode) == 0:
+            print('no seq passed!')
+            with open(os.path.join(os.path.dirname(__file__), "../results/" + outfile) , 'a') as f:
+                #f.write('test_id' + '\t' + 'ARG_prediction' + '\t' + 'resistance_category' + '\t' + 'probability' + '\n')
+                for idx, ele in enumerate(test):
                     f.write(test[idx].id + '\t')
                     f.write('non-ARG' + '\t' + '' + '\t' + '' + '\n')
-    
-    if len(passed_encode) == 0:
-        print('no seq passed!')
-        with open(os.path.join(os.path.dirname(__file__), "../results/" + outfile) , 'w') as f:
-            f.write('test_id' + '\t' + 'ARG_prediction' + '\t' + 'resistance_category' + '\t' + 'probability' + '\n')
-            for idx, ele in enumerate(test):
-                f.write(test[idx].id + '\t')
-                f.write('non-ARG' + '\t' + '' + '\t' + '' + '\n')
-        #pass
+            #pass
